@@ -12,6 +12,9 @@ const HeaderBlock = styled.div`
     font-size: 32px;
     font-weight: 700;
     margin: 0 20px;
+    user-select: none;
+    width: 200px;
+    text-align: center;
   }
 `;
 
@@ -22,13 +25,15 @@ const BtnBlock = styled.div`
   cursor: pointer;
 `;
 
-function CalendarHeader({ currentMonth, decreaseMonth, increaseMonth }) {
+function CalendarHeader({ year, month, decreaseMonth, increaseMonth }) {
   return (
     <HeaderBlock>
       <BtnBlock onClick={decreaseMonth}>
         <FaAngleLeft color="#fff" />
       </BtnBlock>
-      <p>2022년 {currentMonth + 1}월</p>
+      <p>
+        {year}년 {month + 1}월
+      </p>
       <BtnBlock onClick={increaseMonth}>
         <FaAngleRight color="#fff" />
       </BtnBlock>

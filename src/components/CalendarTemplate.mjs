@@ -10,6 +10,9 @@ const Positioner = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #f8f8f8;
+  * {
+    user-select: none;
+  }
 `;
 
 const CalendarBlock = styled.div`
@@ -22,22 +25,74 @@ const CalendarBlock = styled.div`
   box-shadow: 3px 3px 3px 1px rgba(0, 0, 0, 0.1);
 `;
 
-function CalendarTemplate() {
-  const today = new Date();
-  // 선택한날짜 => 초기값은 오늘에 해당하는 달.
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+const today = new Date();
+const initialDate = {
+  year: today.getFullYear(),
+  month: today.getMonth(),
+  date: today.getDate(),
+};
 
-  const decreaseMonth = () => setCurrentMonth(currentMonth - 1);
-  const increaseMonth = () => setCurrentMonth(currentMonth + 1);
+function CalendarTemplate() {
+  // 선택한날짜 => 초기값은 오늘에 해당하는 달.
+  const [currentTargets, setCurrentTargets] = useState(initialDate);
+
+  const { year, month, date } = currentTargets;
+  const [selectedTargets, setSeletecTargets] = useState(initialDate);
+  const decreaseMonth = () => {
+    if (month > 0)
+      setCurrentTargets({
+        ...currentTargets,
+        month: month - 1,
+      });
+    else {
+      setCurrentTargets({
+        ...currentTargets,
+        year: year - 1,
+        month: 11,
+      });
+    }
+  };
+  const increaseMonth = () => {
+    if (month < 11) {
+      setCurrentTargets({
+        ...currentTargets,
+        month: month + 1,
+      });
+    } else {
+      setCurrentTargets({
+        ...currentTargets,
+        year: year + 1,
+        month: 0,
+      });
+    }
+  };
+
+  const renderSelectedDate = () => {
+    setCurrentTargets(initialDate);
+    setSeletecTargets(initialDate);
+  };
+
+  const onClickDate = (targets) => {
+    setSeletecTargets(targets);
+  };
+
   return (
     <Positioner>
       <CalendarBlock>
         <CalendarHeader
-          currentMonth={currentMonth}
+          year={year}
+          month={month}
           decreaseMonth={decreaseMonth}
           increaseMonth={increaseMonth}
         />
-        <CalendarBody currentMonth={currentMonth} />
+        <CalendarBody
+          month={month}
+          date={date}
+          onClickDate={onClickDate}
+          currentTargets={currentTargets}
+          selectedTargets={selectedTargets}
+          renderSelectedDate={renderSelectedDate}
+        />
       </CalendarBlock>
     </Positioner>
   );
